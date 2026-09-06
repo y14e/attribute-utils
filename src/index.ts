@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.5
+ * @version 2.0.6
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -35,12 +35,12 @@ export function addAttributeToken(
   token: string,
   options: Partial<AttributeUtilsOptions> = {},
 ): void {
+  if (!isValid(element, name, token)) {
+    return;
+  }
+
   const value = element.getAttribute(name)?.trim();
-  const {
-    caseInsensitive = false,
-    parse = DEFAULT_PARSER,
-    serialize = DEFAULT_SERIALIZER,
-  } = options;
+  const { caseInsensitive, parse, serialize } = resolveOptions(options);
   const tokens = value ? parse(value).filter(Boolean) : [];
 
   if (caseInsensitive) {
@@ -63,17 +63,17 @@ export function removeAttributeToken(
   token: string,
   options: Partial<AttributeUtilsOptions> = {},
 ): void {
+  if (!isValid(element, name, token)) {
+    return;
+  }
+
   const value = element.getAttribute(name)?.trim();
 
   if (!value) {
     return;
   }
 
-  const {
-    caseInsensitive = false,
-    parse = DEFAULT_PARSER,
-    serialize = DEFAULT_SERIALIZER,
-  } = options;
+  const { caseInsensitive, parse, serialize } = resolveOptions(options);
   const tokens = parse(value).filter(Boolean);
 
   if (!tokens.length) {
@@ -146,4 +146,58 @@ export function saveAttributes(
       snapshot.set(name, element.getAttribute(name));
     });
   });
+}
+
+// -----------------------------------------------------------------------------
+// Utils
+// -----------------------------------------------------------------------------
+
+function isValid(element: Element, name: string, token: string): boolean {
+  if (!(element instanceof Element)) {
+    console.warn('Invalid element');
+    return false;
+  }
+
+  if (!element.hasAttribute(name)) {
+    console.warn('Invalid attribute name');
+    return false;
+  }
+
+  if (typeof token !== 'string' || !token.trim()) {
+    console.warn('Invalid token');
+    return false;
+  }
+
+  return true;
+}
+
+function resolveOptions(
+  options: Partial<AttributeUtilsOptions>,
+): AttributeUtilsOptions {
+  let {
+    caseInsensitive = false,
+    parse = DEFAULT_PARSER,
+    serialize = DEFAULT_SERIALIZER,
+  } = options;
+
+  if (typeof caseInsensitive !== 'boolean') {
+    console.warn('Invalid caseInsensitive option. Fallback: false.');
+    caseInsensitive = false;
+  }
+
+  if (typeof parse !== 'function') {
+    console.warn(
+      'Invalid parser. Fallback: default parser (splits by whitespace).',
+    );
+    parse = DEFAULT_PARSER;
+  }
+
+  if (typeof serialize !== 'function') {
+    console.warn(
+      'Invalid serializer. Fallback: default serializer (joins by whitespace).',
+    );
+    serialize = DEFAULT_SERIALIZER;
+  }
+
+  return { caseInsensitive, parse, serialize };
 }
