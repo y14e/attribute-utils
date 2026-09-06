@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.6
+ * @version 2.0.7
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -158,7 +158,16 @@ function isValid(element: Element, name: string, token: string): boolean {
     return false;
   }
 
-  if (!element.hasAttribute(name)) {
+  try {
+    const value = element.getAttribute(name);
+    element.setAttribute(name, '');
+
+    if (value === null) {
+      element.removeAttribute(name);
+    } else {
+      element.setAttribute(name, value);
+    }
+  } catch {
     console.warn('Invalid attribute name');
     return false;
   }
