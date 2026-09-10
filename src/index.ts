@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.9
+ * @version 2.0.10
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -141,7 +141,9 @@ export function saveAttributes(
       snapshots.set(element, snapshot);
     }
 
-    names.map((name) => snapshot.set(name, element.getAttribute(name)));
+    for (const name of names) {
+      snapshot.set(name, element.getAttribute(name));
+    }
   }
 }
 
