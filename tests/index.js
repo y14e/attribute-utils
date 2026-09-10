@@ -62,16 +62,14 @@ function restoreAttributes(element_or_elements) {
 }
 function saveAttributes(element_or_elements, name_or_names) {
   const names = Array.isArray(name_or_names) ? name_or_names : [name_or_names];
-  (Array.isArray(element_or_elements) ? element_or_elements : [element_or_elements]).forEach((element) => {
+  for (const element of Array.isArray(element_or_elements) ? element_or_elements : [element_or_elements]) {
     let snapshot = snapshots.get(element);
     if (!snapshot) {
       snapshot = /* @__PURE__ */ new Map();
       snapshots.set(element, snapshot);
     }
-    names.forEach((name) => {
-      snapshot.set(name, element.getAttribute(name));
-    });
-  });
+    names.map((name) => snapshot.set(name, element.getAttribute(name)));
+  }
 }
 function isValid(element, name, token) {
   if (!(element instanceof Element)) {
@@ -117,7 +115,7 @@ function resolveOptions(options) {
 /**
  * Attribute Utils
  *
- * @version 2.0.8
+ * @version 2.0.9
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane

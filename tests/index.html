@@ -1,13 +1,10 @@
 <html lang="en">
 <body>
-<div aria-controls="token2 token1" id="target" >
-
-</div>
+<div aria-controls="token2 token1" id="target"></div>
 <script type="module">
 import { addAttributeToken, removeAttributeToken } from './index.js';
 
 const element = document.getElementById('target');
-
 addAttributeToken(element, 'aria-controls', 'token1', { caseInsensitive: false });
 addAttributeToken(element, 'aria-controls', 'token3', { caseInsensitive: false });
 removeAttributeToken(element, 'aria-controls', 'token3', { caseInsensitive: false });

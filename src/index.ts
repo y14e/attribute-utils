@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.8
+ * @version 2.0.9
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -131,10 +131,9 @@ export function saveAttributes(
 ): void {
   const names = Array.isArray(name_or_names) ? name_or_names : [name_or_names];
 
-  (Array.isArray(element_or_elements)
+  for (const element of Array.isArray(element_or_elements)
     ? element_or_elements
-    : [element_or_elements]
-  ).forEach((element) => {
+    : [element_or_elements]) {
     let snapshot = snapshots.get(element);
 
     if (!snapshot) {
@@ -142,10 +141,8 @@ export function saveAttributes(
       snapshots.set(element, snapshot);
     }
 
-    names.forEach((name) => {
-      snapshot.set(name, element.getAttribute(name));
-    });
-  });
+    names.map((name) => snapshot.set(name, element.getAttribute(name)));
+  }
 }
 
 // -----------------------------------------------------------------------------
