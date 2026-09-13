@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.10
+ * @version 2.0.11
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -106,22 +106,20 @@ const snapshots = new WeakMap<Element, Map<string, string | null>>();
 export function restoreAttributes(
   element_or_elements: Element | Element[],
 ): void {
-  for (const element of Array.isArray(element_or_elements)
+  for (const e of Array.isArray(element_or_elements)
     ? element_or_elements
     : [element_or_elements]) {
-    const snapshot = snapshots.get(element);
+    const snapshot = snapshots.get(e);
 
     if (!snapshot) {
       continue;
     }
 
-    for (const [name, value] of snapshot.entries()) {
-      value === null
-        ? element.removeAttribute(name)
-        : element.setAttribute(name, value);
+    for (const [n, v] of snapshot.entries()) {
+      v === null ? e.removeAttribute(n) : e.setAttribute(n, v);
     }
 
-    snapshots.delete(element);
+    snapshots.delete(e);
   }
 }
 
@@ -131,18 +129,18 @@ export function saveAttributes(
 ): void {
   const names = Array.isArray(name_or_names) ? name_or_names : [name_or_names];
 
-  for (const element of Array.isArray(element_or_elements)
+  for (const e of Array.isArray(element_or_elements)
     ? element_or_elements
     : [element_or_elements]) {
-    let snapshot = snapshots.get(element);
+    let snapshot = snapshots.get(e);
 
     if (!snapshot) {
       snapshot = new Map<string, string | null>();
-      snapshots.set(element, snapshot);
+      snapshots.set(e, snapshot);
     }
 
-    for (const name of names) {
-      snapshot.set(name, element.getAttribute(name));
+    for (const n of names) {
+      snapshot.set(n, e.getAttribute(n));
     }
   }
 }
