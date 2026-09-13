@@ -1,6 +1,6 @@
 // src/index.ts
-var DEFAULT_PARSER = (value) => value.split(/\s+/);
-var DEFAULT_SERIALIZER = (tokens) => tokens.join(" ");
+var DEFAULT_PARSER = (v) => v.split(/\s+/);
+var DEFAULT_SERIALIZER = (t) => t.join(" ");
 function addAttributeToken(element, name, token, options = {}) {
   if (!isValid(element, name, token)) {
     return;
@@ -10,7 +10,7 @@ function addAttributeToken(element, name, token, options = {}) {
   const tokens = value ? parse(value).filter(Boolean) : [];
   if (caseInsensitive) {
     const lower = token.toLowerCase();
-    if (tokens.every((token2) => token2.toLowerCase() !== lower)) {
+    if (tokens.every((t) => t.toLowerCase() !== lower)) {
       tokens.push(token);
       element.setAttribute(name, serialize(tokens));
     }
@@ -35,7 +35,7 @@ function removeAttributeToken(element, name, token, options = {}) {
   }
   if (caseInsensitive) {
     const lower = token.toLowerCase();
-    const filtered = tokens.filter((token2) => token2.toLowerCase() !== lower);
+    const filtered = tokens.filter((t) => t.toLowerCase() !== lower);
     if (filtered.length !== tokens.length) {
       filtered.length ? element.setAttribute(name, serialize(filtered)) : element.removeAttribute(name);
     }
@@ -68,7 +68,9 @@ function saveAttributes(element_or_elements, name_or_names) {
       snapshot = /* @__PURE__ */ new Map();
       snapshots.set(element, snapshot);
     }
-    names.map((name) => snapshot.set(name, element.getAttribute(name)));
+    for (const name of names) {
+      snapshot.set(name, element.getAttribute(name));
+    }
   }
 }
 function isValid(element, name, token) {
@@ -115,7 +117,7 @@ function resolveOptions(options) {
 /**
  * Attribute Utils
  *
- * @version 2.0.9
+ * @version 2.0.12
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane

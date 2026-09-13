@@ -1,7 +1,7 @@
 /**
  * Attribute Utils
  *
- * @version 2.0.11
+ * @version 2.0.12
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -22,8 +22,8 @@ export interface AttributeUtilsOptions {
 // Constants
 // -----------------------------------------------------------------------------
 
-const DEFAULT_PARSER = (value: string): string[] => value.split(/\s+/);
-const DEFAULT_SERIALIZER = (tokens: string[]): string => tokens.join(' ');
+const DEFAULT_PARSER = (v: string): string[] => v.split(/\s+/);
+const DEFAULT_SERIALIZER = (t: string[]): string => t.join(' ');
 
 // -----------------------------------------------------------------------------
 // APIs
@@ -46,7 +46,7 @@ export function addAttributeToken(
   if (caseInsensitive) {
     const lower = token.toLowerCase();
 
-    if (tokens.every((token) => token.toLowerCase() !== lower)) {
+    if (tokens.every((t) => t.toLowerCase() !== lower)) {
       tokens.push(token);
       element.setAttribute(name, serialize(tokens));
     }
@@ -82,7 +82,7 @@ export function removeAttributeToken(
 
   if (caseInsensitive) {
     const lower = token.toLowerCase();
-    const filtered = tokens.filter((token) => token.toLowerCase() !== lower);
+    const filtered = tokens.filter((t) => t.toLowerCase() !== lower);
 
     if (filtered.length !== tokens.length) {
       filtered.length
@@ -106,20 +106,22 @@ const snapshots = new WeakMap<Element, Map<string, string | null>>();
 export function restoreAttributes(
   element_or_elements: Element | Element[],
 ): void {
-  for (const e of Array.isArray(element_or_elements)
+  for (const element of Array.isArray(element_or_elements)
     ? element_or_elements
     : [element_or_elements]) {
-    const snapshot = snapshots.get(e);
+    const snapshot = snapshots.get(element);
 
     if (!snapshot) {
       continue;
     }
 
-    for (const [n, v] of snapshot.entries()) {
-      v === null ? e.removeAttribute(n) : e.setAttribute(n, v);
+    for (const [name, value] of snapshot.entries()) {
+      value === null
+        ? element.removeAttribute(name)
+        : element.setAttribute(name, value);
     }
 
-    snapshots.delete(e);
+    snapshots.delete(element);
   }
 }
 
@@ -129,18 +131,18 @@ export function saveAttributes(
 ): void {
   const names = Array.isArray(name_or_names) ? name_or_names : [name_or_names];
 
-  for (const e of Array.isArray(element_or_elements)
+  for (const element of Array.isArray(element_or_elements)
     ? element_or_elements
     : [element_or_elements]) {
-    let snapshot = snapshots.get(e);
+    let snapshot = snapshots.get(element);
 
     if (!snapshot) {
       snapshot = new Map<string, string | null>();
-      snapshots.set(e, snapshot);
+      snapshots.set(element, snapshot);
     }
 
-    for (const n of names) {
-      snapshot.set(n, e.getAttribute(n));
+    for (const name of names) {
+      snapshot.set(name, element.getAttribute(name));
     }
   }
 }
