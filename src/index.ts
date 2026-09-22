@@ -1,33 +1,11 @@
-/**
- * Attribute Utils
- *
- * @version 2.0.12
- * @author Yusuke Kamiyamane
- * @license MIT
- * @copyright Copyright (c) Yusuke Kamiyamane
- * @see {@link https://github.com/y14e/attribute-utils}
- */
-
-// -----------------------------------------------------------------------------
-// Types
-// -----------------------------------------------------------------------------
-
 export interface AttributeUtilsOptions {
   caseInsensitive: boolean;
   parse: (value: string) => string[];
   serialize: (tokens: string[]) => string;
 }
 
-// -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
-
 const DEFAULT_PARSER = (v: string): string[] => v.split(/\s+/);
 const DEFAULT_SERIALIZER = (t: string[]): string => t.join(' ');
-
-// -----------------------------------------------------------------------------
-// APIs
-// -----------------------------------------------------------------------------
 
 export function addAttributeToken(
   element: Element,
@@ -146,10 +124,6 @@ export function saveAttributes(
     }
   }
 }
-
-// -----------------------------------------------------------------------------
-// Utils
-// -----------------------------------------------------------------------------
 
 function isValid(element: Element, name: string, token: string): boolean {
   if (!(element instanceof Element)) {
