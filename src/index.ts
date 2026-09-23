@@ -29,7 +29,7 @@ export function addAttributeToken(
       element.setAttribute(name, serialize(tokens));
     }
   } else {
-    const set = new Set<string>(tokens);
+    const set = new Set(tokens);
     set.add(token);
     element.setAttribute(name, serialize([...set]));
   }
@@ -68,7 +68,7 @@ export function removeAttributeToken(
         : element.removeAttribute(name);
     }
   } else {
-    const set = new Set<string>(tokens);
+    const set = new Set(tokens);
     set.delete(token);
 
     if (set.size !== tokens.length) {
