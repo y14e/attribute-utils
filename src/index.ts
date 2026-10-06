@@ -21,17 +21,18 @@ export function addAttributeToken(
   const { caseInsensitive, parse, serialize } = resolveOptions(options);
   const tokens = value ? parse(value).filter(Boolean) : [];
 
-  if (caseInsensitive) {
-    const lower = token.toLowerCase();
-
-    if (tokens.every((t) => t.toLowerCase() !== lower)) {
-      tokens.push(token);
-      element.setAttribute(name, serialize(tokens));
-    }
-  } else {
+  if (!caseInsensitive) {
     const set = new Set(tokens);
     set.add(token);
     element.setAttribute(name, serialize([...set]));
+    return;
+  }
+
+  const lower = token.toLowerCase();
+
+  if (tokens.every((t) => t.toLowerCase() !== lower)) {
+    tokens.push(token);
+    element.setAttribute(name, serialize(tokens));
   }
 }
 
@@ -58,16 +59,7 @@ export function removeAttributeToken(
     return;
   }
 
-  if (caseInsensitive) {
-    const lower = token.toLowerCase();
-    const filtered = tokens.filter((t) => t.toLowerCase() !== lower);
-
-    if (filtered.length !== tokens.length) {
-      filtered.length
-        ? element.setAttribute(name, serialize(filtered))
-        : element.removeAttribute(name);
-    }
-  } else {
+  if (!caseInsensitive) {
     const set = new Set(tokens);
     set.delete(token);
 
@@ -76,6 +68,17 @@ export function removeAttributeToken(
         ? element.setAttribute(name, serialize([...set]))
         : element.removeAttribute(name);
     }
+
+    return;
+  }
+
+  const lower = token.toLowerCase();
+  const filtered = tokens.filter((t) => t.toLowerCase() !== lower);
+
+  if (filtered.length !== tokens.length) {
+    filtered.length
+      ? element.setAttribute(name, serialize(filtered))
+      : element.removeAttribute(name);
   }
 }
 
