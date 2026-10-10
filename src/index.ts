@@ -53,17 +53,18 @@ export function removeAttributeToken(
   }
 
   const { caseInsensitive, parse, serialize } = resolveOptions(options);
-  const tokens = parse(value).filter(Boolean);
+  const original = parse(value).filter(Boolean);
+  const originalLength = original.length;
 
-  if (!tokens.length) {
+  if (!originalLength) {
     return;
   }
 
   if (!caseInsensitive) {
-    const set = new Set(tokens);
+    const set = new Set(original);
     set.delete(token);
 
-    if (set.size !== tokens.length) {
+    if (set.size !== originalLength) {
       set.size
         ? element.setAttribute(name, serialize([...set]))
         : element.removeAttribute(name);
@@ -73,10 +74,11 @@ export function removeAttributeToken(
   }
 
   const lower = token.toLowerCase();
-  const filtered = tokens.filter((t) => t.toLowerCase() !== lower);
+  const filtered = original.filter((t) => t.toLowerCase() !== lower);
+  const filteredLength = filtered.length;
 
-  if (filtered.length !== tokens.length) {
-    filtered.length
+  if (filteredLength !== originalLength) {
+    filteredLength
       ? element.setAttribute(name, serialize(filtered))
       : element.removeAttribute(name);
   }
