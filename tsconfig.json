@@ -14,7 +14,9 @@
     "moduleResolution": "bundler",
 
     // emit
+    "declaration": true,
     "noEmit": true,
+    "sourceMap": true,
 
     // interop-constraints
     "verbatimModuleSyntax": true,
