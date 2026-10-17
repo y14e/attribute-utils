@@ -12,9 +12,6 @@
     "allowImportingTsExtensions": true,
     "module": "preserve",
     "moduleResolution": "bundler",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
 
     // emit
     "noEmit": true,
@@ -23,11 +20,9 @@
     "verbatimModuleSyntax": true,
 
     // language-and-environment
-    "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "target": "ES2024",
+    "target": "ES2022",
 
     // completeness
     "skipLibCheck": true
   },
-  "include": ["src"]
 }
