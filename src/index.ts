@@ -1,11 +1,11 @@
 export interface AttributeUtilsOptions {
   caseInsensitive: boolean;
   parse: (value: string) => string[];
-  serialize: (tokens: string[]) => string;
+  serialize: (tokens: ReadonlyArray<string>) => string;
 }
 
 const DEFAULT_PARSER = (v: string): string[] => v.split(/\s+/);
-const DEFAULT_SERIALIZER = (t: string[]): string => t.join(' ');
+const DEFAULT_SERIALIZER = (t: ReadonlyArray<string>): string => t.join(' ');
 
 export function addAttributeToken(
   element: Element,
@@ -87,7 +87,7 @@ export function removeAttributeToken(
 const snapshots = new WeakMap<Element, Map<string, string | null>>();
 
 export function restoreAttributes(
-  element_or_elements: Element | Element[],
+  element_or_elements: Element | ReadonlyArray<Element>,
 ): void {
   for (const element of Array.isArray(element_or_elements)
     ? element_or_elements
@@ -109,7 +109,7 @@ export function restoreAttributes(
 }
 
 export function saveAttributes(
-  element_or_elements: Element | Element[],
+  element_or_elements: Element | ReadonlyArray<Element>,
   name_or_names: string | string[],
 ): void {
   const names = Array.isArray(name_or_names) ? name_or_names : [name_or_names];
