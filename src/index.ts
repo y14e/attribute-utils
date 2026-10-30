@@ -65,9 +65,7 @@ export function removeAttributeToken(
     set.delete(token);
 
     if (set.size !== originalLength) {
-      set.size
-        ? element.setAttribute(name, serialize([...set]))
-        : element.removeAttribute(name);
+      set.size ? element.setAttribute(name, serialize([...set])) : element.removeAttribute(name);
     }
 
     return;
@@ -86,9 +84,7 @@ export function removeAttributeToken(
 
 const snapshots = new WeakMap<Element, Map<string, string | null>>();
 
-export function restoreAttributes(
-  element_or_elements: Element | Element[],
-): void {
+export function restoreAttributes(element_or_elements: Element | Element[]): void {
   for (const element of Array.isArray(element_or_elements)
     ? element_or_elements
     : [element_or_elements]) {
@@ -99,9 +95,7 @@ export function restoreAttributes(
     }
 
     for (const [name, value] of snapshot.entries()) {
-      value === null
-        ? element.removeAttribute(name)
-        : element.setAttribute(name, value);
+      value === null ? element.removeAttribute(name) : element.setAttribute(name, value);
     }
 
     snapshots.delete(element);
@@ -151,14 +145,8 @@ function isValid(element: Element, name: string, token: string): boolean {
   return true;
 }
 
-function resolveOptions(
-  options: Partial<AttributeUtilsOptions>,
-): AttributeUtilsOptions {
-  let {
-    caseInsensitive = false,
-    parse = DEFAULT_PARSER,
-    serialize = DEFAULT_SERIALIZER,
-  } = options;
+function resolveOptions(options: Partial<AttributeUtilsOptions>): AttributeUtilsOptions {
+  let { caseInsensitive = false, parse = DEFAULT_PARSER, serialize = DEFAULT_SERIALIZER } = options;
 
   if (typeof caseInsensitive !== 'boolean') {
     console.warn('Invalid caseInsensitive option. Fallback: false.');
@@ -166,16 +154,12 @@ function resolveOptions(
   }
 
   if (typeof parse !== 'function') {
-    console.warn(
-      'Invalid parser. Fallback: default parser (splits by whitespace).',
-    );
+    console.warn('Invalid parser. Fallback: default parser (splits by whitespace).');
     parse = DEFAULT_PARSER;
   }
 
   if (typeof serialize !== 'function') {
-    console.warn(
-      'Invalid serializer. Fallback: default serializer (joins by whitespace).',
-    );
+    console.warn('Invalid serializer. Fallback: default serializer (joins by whitespace).');
     serialize = DEFAULT_SERIALIZER;
   }
 
