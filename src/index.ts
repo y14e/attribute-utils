@@ -63,9 +63,10 @@ export function removeAttributeToken(
   if (!caseInsensitive) {
     const set = new Set(original);
     set.delete(token);
+    const newLength = set.size;
 
-    if (set.size !== originalLength) {
-      set.size ? element.setAttribute(name, serialize([...set])) : element.removeAttribute(name);
+    if (newLength !== originalLength) {
+      newLength ? element.setAttribute(name, serialize([...set])) : element.removeAttribute(name);
     }
 
     return;
