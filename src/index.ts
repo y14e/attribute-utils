@@ -3,7 +3,7 @@ interface ArrayCtor extends ArrayConstructor {
 }
 
 // biome-ignore lint: enhanced type definitions for Array constructor
-export declare const Array: ArrayCtor;
+declare const Array: ArrayCtor;
 
 export interface AttributeUtilsOptions {
   caseInsensitive: boolean;
